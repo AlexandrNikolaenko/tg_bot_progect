@@ -19,8 +19,8 @@ def find_file(user_id):
 
 # Создание графика изменения финансового состояния
 def create_rate(user_id, index):
-    gain = FINANCES[index].gain
-    cost = FINANCES[index].cost
+    gain = FINANCES[index]['gain']
+    cost = FINANCES[index]['cost']
     plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
     plt.savefig(f'sates{user_id}.png')
 
@@ -31,7 +31,7 @@ async def handle_send_photo(message: Message):
     user = message.from_user.id
     index = 0
     for is_user in FINANCES:
-        if is_user.user_id == user:
+        if is_user['user_id'] == user:
             break
         else:
             index += 1

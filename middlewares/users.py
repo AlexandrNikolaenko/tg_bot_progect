@@ -20,5 +20,6 @@ class UsersMiddlewares(BaseMiddleware):
                 full_name=username.full_name
             )
 
+
         data['_user'] = user
         await handler(event, data)
