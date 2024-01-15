@@ -2,7 +2,6 @@ import time
 import re
 from aiogram import Router
 from aiogram import F
-from aiogram import types
 from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
@@ -69,17 +68,15 @@ async def add_info(message: Message):
 
 @pull_data.message(WaitingState.WAIT_STATS)
 async def push_to_finance(id_user, message: Message):
-    count = 0
-    find = False
-    for is_user in FINANCES:
-        if is_user == id_user:
-            FINANCES[count]['gain'].append(await new_gain(message))
-            FINANCES[count]['cost'].append(await new_cost(message))
-            find = True
+    for is_user in User.select():
+        if is_user.id_ == id_user:
+            if is_user.gain is not None and is_user.cost is not None:
+                is_user.gain += '\n' + str(await new_gain(message))
+                is_user.cost += '\n' + str(await new_cost(message))
+            else:
+                is_user.gain += str(await new_gain(message))
+                is_user.cost += str(await new_cost(message))
             break
-        count += 1
-    if not find:
-        FINANCES.append({'user_id': id_user, 'gain': await new_gain(), 'cost': await new_cost()})
 
 
 @pull_data.message(Command('add_data'))
@@ -92,13 +89,13 @@ async def handle_pull(message: Message, state: FSMContext):
             if not (stroke.finance is None):
                 await message.reply('Add new information')
                 await state.set_state(WaitingState.ADD_INFO)
-                new_info = str(await add_info(message))
-                stroke.finance += '/n' + new_info
+                new_info = str(await add_info(Message))
+                stroke.finance += '\n' + new_info
                 stroke.save()
             else:
                 await message.reply("There aren't information about You, please add it")
                 await state.set_state(WaitingState.ADD_INFO)
-                new_info = str(await add_info(message))
+                new_info = str(await add_info(Message))
                 stroke.finance = new_info
                 stroke.save()
             await state.set_state(WaitingState.WAIT_STATS)

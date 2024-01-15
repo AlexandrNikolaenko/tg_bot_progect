@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from aiogram import Router
 from aiogram.types import Message, InputFile
 from aiogram.filters.command import Command
-from data.db import FINANCES
+from data.db import User
 from aiogram.methods.send_photo import SendPhoto
 from glob import glob
 
@@ -17,27 +17,20 @@ def find_file(user_id):
     return filename
 
 
-# Создание графика изменения финансового состояния
-def create_rate(user_id, index):
-    gain = FINANCES[index]['gain']
-    cost = FINANCES[index]['cost']
-    plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
-    plt.savefig(f'sates{user_id}.png')
-
-
 # Вывод графика как картинки в чат с ботом
 @per_rate_router.message(Command('my_rate'))
 async def handle_send_photo(message: Message):
     user = message.from_user.id
-    index = 0
-    for is_user in FINANCES:
-        if is_user['user_id'] == user:
+    for is_user in User.select():
+        if is_user.id_ == user:
+            if is_user.gain is not None and is_user.cost is not None:
+                gain = list(map(int, is_user.gain.split('\n')))
+                cost = list(map(int, is_user.cost.split('\n')))
+                plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
+                plt.savefig(f'sates{user}.png')
+                photo = InputFile(find_file(user))
+                await SendPhoto(chat_id=message.chat.id, photo=photo)
+            else:
+                await message.reply("You haven't own statistic, please add Your data")
             break
-        else:
-            index += 1
-    if index != len(FINANCES):
-        create_rate(user, index)
-        photo = InputFile(find_file(user))
-        await SendPhoto(chat_id=message.chat.id, photo=photo)
-    else:
-        await message.reply("You haven't own statistic, please add Your data")
+

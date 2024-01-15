@@ -19,7 +19,5 @@ class UsersMiddlewares(BaseMiddleware):
                 user_name=username.username,
                 full_name=username.full_name
             )
-
-
         data['_user'] = user
         await handler(event, data)
