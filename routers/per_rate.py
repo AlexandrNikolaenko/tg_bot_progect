@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from aiogram import Router
-from aiogram.types import Message, InputFile
+from aiogram.types import Message, FSInputFile, InputMediaPhoto
 from aiogram.filters.command import Command
 from data.db import User
 from aiogram.methods.send_photo import SendPhoto
@@ -27,9 +27,11 @@ async def handle_send_photo(message: Message):
                 cost = list(map(int, is_user.cost.split('\n')))
                 plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
                 plt.savefig(f'states{user}.png')
-                # photo = InputFile(f"tg-bot/states{user}.png")
-                # with open(find_file(user), 'rb') as photo:
-                await message.reply_photo(photo=find_file(user))
+                caption = 'Blue is gain\nOrange is cost'
+                # media = InputMediaPhoto(caption=caption, media=FSInputFile(f"tg-bot/states{user}.png"))
+                # await message.reply_media_group(media=[media])
+                photo = FSInputFile(f"tg-bot/states{user}.png")
+                await message.reply_photo(photo=photo, caption=caption)
             else:
                 await message.reply("You haven't own statistic, please add Your data")
             break

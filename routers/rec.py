@@ -3,7 +3,6 @@ from aiogram.types import Message
 from aiogram.filters.command import Command
 from data.db import User
 import g4f
-import asyncio
 
 # Этот функционал должен будет общаться с ChatGPT или испоьльзовать его API и
 # получать рекомендации для улучшения финансовой ситуации

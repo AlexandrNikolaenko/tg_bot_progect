@@ -2,7 +2,6 @@ from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 from data.db import User
-from routers.pull_data import LAST_MESSAGE
 
 
 class UsersMiddlewares(BaseMiddleware):
