@@ -27,8 +27,9 @@ async def handle_send_photo(message: Message):
                 cost = list(map(int, is_user.cost.split('\n')))
                 plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
                 plt.savefig(f'states{user}.png')
-                photo = InputFile(f"tg-bot/states{user}.png")
-                await message.reply_photo(photo=photo)
+                # photo = InputFile(f"tg-bot/states{user}.png")
+                # with open(find_file(user), 'rb') as photo:
+                await message.reply_photo(photo=find_file(user))
             else:
                 await message.reply("You haven't own statistic, please add Your data")
             break
