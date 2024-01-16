@@ -4,7 +4,7 @@ from aiogram.types import Message, InputFile
 from aiogram.filters.command import Command
 from data.db import User
 from aiogram.methods.send_photo import SendPhoto
-from glob import glob
+import os
 
 # Функционал для отображения рейтинга финансового состояния
 per_rate_router = Router()
@@ -12,9 +12,8 @@ per_rate_router = Router()
 
 # Поиск пути к созданному графику
 def find_file(user_id):
-    file_list = glob(f'states{user_id}.png')
-    filename = file_list[0]
-    return filename
+    name = f'tg-bot/states{user_id}.png'
+    return os.path.abspath(name)
 
 
 # Вывод графика как картинки в чат с ботом
@@ -27,9 +26,9 @@ async def handle_send_photo(message: Message):
                 gain = list(map(int, is_user.gain.split('\n')))
                 cost = list(map(int, is_user.cost.split('\n')))
                 plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
-                plt.savefig(f'sates{user}.png')
-                photo = InputFile(find_file(user))
-                await SendPhoto(chat_id=message.chat.id, photo=photo)
+                plt.savefig(f'states{user}.png')
+                photo = InputFile(f"tg-bot/states{user}.png")
+                await message.reply_photo(photo=photo)
             else:
                 await message.reply("You haven't own statistic, please add Your data")
             break
