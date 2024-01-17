@@ -12,7 +12,7 @@ rec_router = Router()
 
 async def create_rec(message: Message, text):
     response = g4f.ChatCompletion.create(
-        model=g4f.models.gpt_4,
+        model=g4f.models.default,
         messages=[{"role": "user", "content": 'Please help me to improve my finance situation:\n' + text}],
     )
     return await message.reply(response)
