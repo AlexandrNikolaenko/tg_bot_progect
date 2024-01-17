@@ -30,8 +30,9 @@ async def handle_send_photo(message: Message):
                 caption = 'Blue is gain\nOrange is cost'
                 # media = InputMediaPhoto(caption=caption, media=FSInputFile(f"tg-bot/states{user}.png"))
                 # await message.reply_media_group(media=[media])
-                photo = FSInputFile(f"tg-bot/states{user}.png")
-                await message.reply_photo(photo=photo, caption=caption)
+                photo = FSInputFile(f"states{user}.png")
+                # photo = open(f"states{user}.png")
+                await message.reply_photo(photo, caption=caption)
             else:
                 await message.reply("You haven't own statistic, please add Your data")
             break

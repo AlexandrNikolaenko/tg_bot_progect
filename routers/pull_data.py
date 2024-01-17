@@ -95,7 +95,7 @@ async def handle_pull(message: Message, state: FSMContext):
                 stroke.finance = new_info
                 stroke.save()
             await state.set_state(WaitingState.WAIT_STATS)
-            await message.reply('Put Your gain and cost as:\ncost: sum\ngain: sum')
+            await message.reply('Put Your gain and cost as:\ncost: sum\ngain: sum\n\nplease enter separately')
             break
     while not UPDATE_STATS[f'{user.id}']['gain'] or not UPDATE_STATS[f'{user.id}']['cost']:
         await asyncio.sleep(0.2)
