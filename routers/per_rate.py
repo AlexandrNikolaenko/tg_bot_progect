@@ -25,7 +25,7 @@ async def handle_send_photo(message: Message):
             if is_user.gain is not None and is_user.cost is not None:
                 gain = list(map(int, is_user.gain.split('\n')))
                 cost = list(map(int, is_user.cost.split('\n')))
-                plt.plot([i for i in range(len(gain))], gain, [i for i in range(len(cost))], cost)
+                plt.plot([i for i in range(len(gain))], gain, 'blue', [i for i in range(len(cost))], cost, 'orange')
                 plt.savefig(f'states{user}.png')
                 caption = 'Blue is gain\nOrange is cost'
                 # media = InputMediaPhoto(caption=caption, media=FSInputFile(f"tg-bot/states{user}.png"))
